@@ -36,13 +36,25 @@ AUTH_USER_MODEL = 'users.UserProfile'
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
-    'users'
+    'DjangoUeditor',
+
+    'xadmin',
+    'crispy_forms',
+    'reversion',
+
+    'users.apps.UsersConfig',
+    'goods.apps.GoodsConfig',
+    'trade.apps.TradeConfig',
+    'user_operation.apps.UserOperationConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -112,19 +124,37 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# REST_FRAMEWORK = {
+#     # Use Django's standard `django.contrib.auth` permissions,
+#     # or allow read-only access for unauthenticated users.
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+#     ]
+# }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
+#
+# TIME_ZONE = 'UTC'
+#
+# USE_I18N = True
+#
+# USE_L10N = True
+#
+# USE_TZ = True
 
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'zh-hans'
+
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -150,4 +180,6 @@ STATICFILES_FINDERS = (
 
 MEDIA_URL = "/media/"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")  #注意:这里配置os的时候,不像配置static的时候要[],这里不需要[]
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/").replace("\\", "/")  #注意:这里配置os的时候,不像配置static的时候要[],这里不需要[]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap'

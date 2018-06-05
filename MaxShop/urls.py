@@ -13,9 +13,43 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
+from django.urls import path, include, re_path
+from django.views.static import serve
+
+
+import xadmin
+xadmin.autodiscover()
+
+# version模块自动注册需要版本控制的 Model
+from xadmin.plugins import xversion
+xversion.register_models()
+
+from rest_framework.documentation import include_docs_urls
+from rest_framework.routers import DefaultRouter
+
+
+from MaxShop.settings import MEDIA_ROOT
+from goods.views import GoodsListViewSet,GoodsimageListViewSet
+
+router = DefaultRouter()
+
+#配置goods的url
+router.register(r'goods', GoodsListViewSet, base_name="goods")
+
+#配置images的url
+router.register(r'goodsImage', GoodsimageListViewSet, base_name="goodsImage")
+
+goods_list = GoodsListViewSet.as_view({
+    'get': 'list',
+})
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('xadmin/', xadmin.site.urls),
+    path(r'ueditor/', include('DjangoUeditor.urls')),
+    re_path('^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
+    re_path(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path(r'', include(router.urls)),
+    path(r'docs/', include_docs_urls(title="MaxShop"))
+
 ]
+
